@@ -2,7 +2,7 @@ import Button from "@/components/commons/Button";
 import Loading from "@/components/commons/Loading";
 import MovieCard from "@/components/commons/MovieCard";
 import { MoviesProps } from "@/interfaces";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface MProps {
   movies: MoviesProps[];
@@ -15,35 +15,35 @@ const Movies: React.FC<MProps> = () => {
   const [movies, setMovies] = useState<MoviesProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchMovies = useCallback(async () => {
-    setLoading(true);
-    const response = await fetch("/api/fetch-movies", {
-      method: "POST",
-      body: JSON.stringify({
-        page,
-        year,
-        genre: genre === "All" ? "" : genre,
-      }),
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
-
-    if (!response.ok) {
-      setLoading(false);
-      throw new Error("Something went wrong");
-    }
-
-    const data = await response.json();
-    const results = data.movies;
-    console.log(results);
-    setMovies(results);
-    setLoading(false);
-  }, [page, year, genre]);
-
   useEffect(() => {
+    const fetchMovies = async () => {
+      setLoading(true);
+      const response = await fetch("/api/fetch-movies", {
+        method: "POST",
+        body: JSON.stringify({
+          page,
+          year,
+          genre: genre === "All" ? "" : genre,
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      });
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error("Something went wrong");
+      }
+
+      const data = await response.json();
+      const results = data.movies;
+      console.log(results);
+      setMovies(results);
+      setLoading(false);
+    };
+
     fetchMovies();
-  }, [fetchMovies]);
+  }, [page, year, genre]);
 
   return (
     <div className="min-h-screen bg-[#110F17] text-white px-4 md:px-10 lg:px-44">

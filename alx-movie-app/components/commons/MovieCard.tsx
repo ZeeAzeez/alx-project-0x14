@@ -7,10 +7,10 @@ const MovieCard: React.FC<MovieProps> = ({
   releaseYear,
 }) => {
   return (
-    <div className="h-[563px]">
+    <div className="h-140.75">
       <div>
         <Image
-          className="h-[430px] w-full rounded-md hover:cursor-pointer"
+          className="h-107.5 w-full rounded-md hover:cursor-pointer"
           src={posterImage}
           width={100}
           height={100}
